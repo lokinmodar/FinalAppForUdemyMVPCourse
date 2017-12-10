@@ -31,7 +31,8 @@ public class ApiModuleForName {
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
         interceptor.setLevel(HttpLoggingInterceptor.Level.BASIC);
 
-        return new OkHttpClient.Builder().addInterceptor(interceptor).addInterceptor(new Interceptor() {
+        return new OkHttpClient.Builder().addInterceptor(interceptor)
+                .addInterceptor(new Interceptor() {
             @Override
             public Response intercept(Chain chain) throws IOException {
                 Request request = chain.request();

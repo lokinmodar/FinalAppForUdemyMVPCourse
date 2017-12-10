@@ -13,7 +13,10 @@ import dagger.Component;
  */
 
 @Singleton
-@Component(modules = {ApplicationModule.class, ApiModuleForName.class, ApiModuleForInfo.class,TopMoviesModule.class})
+@Component(modules = {ApplicationModule.class,
+        ApiModuleForName.class,
+        ApiModuleForInfo.class,
+        TopMoviesModule.class})
 public interface ApplicationComponent {
 
     void inject(TopMoviesActivity target);

@@ -47,7 +47,7 @@ public class TopMoviesRepository implements Repository {
     public Observable<Result> getResultsFromMemory() {
 
         if (isUpToDate()) {
-            return Observable.from(results);
+            return Observable.fromIterable(results);
         } else {
             timestamp = System.currentTimeMillis();
             results.clear();
@@ -60,14 +60,14 @@ public class TopMoviesRepository implements Repository {
 
         Observable<TopRated> topRatedObservable = movieApiService.getTopRatedMovies(1).concatWith(movieApiService.getTopRatedMovies(2)).concatWith(movieApiService.getTopRatedMovies(3));
 
-        return topRatedObservable.concatMap(new Func1<TopRated, Observable<Result>>() {
+        return topRatedObservable.concatMap(new Function<TopRated, Observable<Result>>() {
             @Override
-            public Observable<Result> call(TopRated topRated) {
-                return Observable.from(topRated.results);
+            public Observable<Result> apply(TopRated topRated) {
+                return Observable.fromIterable(topRated.results);
             }
-        }).doOnNext(new Action1<Result>() {
+        }).doOnNext(new Consumer<Result>() {
             @Override
-            public void call(Result result) {
+            public void accept(Result result) {
                 results.add(result);
             }
         });
@@ -77,7 +77,7 @@ public class TopMoviesRepository implements Repository {
     public Observable<String> getCountriesFromMemory() {
 
         if (isUpToDate()) {
-            return Observable.from(countries);
+            return Observable.fromIterable(countries);
         } else {
             timestamp = System.currentTimeMillis();
             countries.clear();
@@ -88,19 +88,19 @@ public class TopMoviesRepository implements Repository {
     @Override
     public Observable<String> getCountriesFromNetwork() {
 
-        return getResultsFromNetwork().concatMap(new Func1<Result, Observable<OmdbApi>>() {
+        return getResultsFromNetwork().concatMap(new Function<Result, Observable<OmdbApi>>() {
             @Override
-            public Observable<OmdbApi> call(Result result) {
+            public Observable<OmdbApi> apply(Result result) {
                 return moreInfoApiService.getCountry(result.title);
             }
-        }).concatMap(new Func1<OmdbApi, Observable<String>>() {
+        }).concatMap(new Function<OmdbApi, Observable<String>>() {
             @Override
-            public Observable<String> call(OmdbApi omdbApi) {
+            public Observable<String> apply(OmdbApi omdbApi) {
                 return Observable.just(omdbApi.getCountry());
             }
-        }).doOnNext(new Action1<String>() {
+        }).doOnNext(new Consumer<String>() {
             @Override
-            public void call(String s) {
+            public void accept(String s) {
                 countries.add(s);
             }
         });
@@ -118,4 +118,4 @@ public class TopMoviesRepository implements Repository {
     public Observable<Result> getResultData() {
         return getResultsFromMemory().switchIfEmpty(getResultsFromNetwork());
     }
-}}
+}
