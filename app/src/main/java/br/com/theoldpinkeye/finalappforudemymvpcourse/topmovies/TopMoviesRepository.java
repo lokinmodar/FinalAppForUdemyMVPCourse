@@ -10,16 +10,16 @@ import br.com.theoldpinkeye.finalappforudemymvpcourse.http.apimodel.OmdbApi;
 import br.com.theoldpinkeye.finalappforudemymvpcourse.http.apimodel.Result;
 import br.com.theoldpinkeye.finalappforudemymvpcourse.http.apimodel.TopRated;
 import io.reactivex.Observable;
-import io.reactivex.functions.Action;
-import io.reactivex.functions.BiFunction;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
+
+import static br.com.theoldpinkeye.finalappforudemymvpcourse.http.ApiModuleForInfo.API_KEY;
 
 /**
  * Created by Just Us on 01/12/2017.
  */
 
-//TODO: Rewrite code to match RxJava2 specifications!
+
 public class TopMoviesRepository implements Repository {
 
     private MovieApiService movieApiService;
@@ -28,7 +28,8 @@ public class TopMoviesRepository implements Repository {
     private List<Result> results;
     private long timestamp;
 
-    private static final long STALE_MS = 20 * 1000; // Data is stale after 20 seconds
+
+    private static final long STALE_MS = 60 * 1000; // Data is stale after 60 seconds
 
     public TopMoviesRepository(MovieApiService movieApiService, MoreInfoApiService moreInfoApiService) {
         this.moreInfoApiService = moreInfoApiService;
@@ -91,7 +92,7 @@ public class TopMoviesRepository implements Repository {
         return getResultsFromNetwork().concatMap(new Function<Result, Observable<OmdbApi>>() {
             @Override
             public Observable<OmdbApi> apply(Result result) {
-                return moreInfoApiService.getCountry(result.title);
+                return moreInfoApiService.getCountry(result.title, API_KEY);
             }
         }).concatMap(new Function<OmdbApi, Observable<String>>() {
             @Override
@@ -103,6 +104,8 @@ public class TopMoviesRepository implements Repository {
             public void accept(String s) {
                 countries.add(s);
             }
+        }).doFinally(() -> {//Avoids Socket closed Exception!
+            isUpToDate();
         });
 
     }

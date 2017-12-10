@@ -228,7 +228,7 @@ public class OmdbApi {
      * @return The country
      */
     public String getCountry() {
-        return country;
+        return country == null ? "n/a" : country; //fixes the null value exception for not finding country
     }
 
     /**

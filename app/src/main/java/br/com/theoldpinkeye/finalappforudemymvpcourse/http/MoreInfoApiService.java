@@ -11,8 +11,10 @@ import retrofit2.http.Query;
 
 public interface MoreInfoApiService {
 
+
     @GET("/")
-    Observable<OmdbApi> getCountry(@Query("t") String title);
+    Observable<OmdbApi> getCountry(@Query("t") String title,
+                                   @Query("apikey") String API_KEY);
 
 
 }

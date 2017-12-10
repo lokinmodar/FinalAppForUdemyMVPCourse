@@ -1,6 +1,7 @@
 package br.com.theoldpinkeye.finalappforudemymvpcourse.http;
 
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 import dagger.Module;
 import dagger.Provides;
@@ -22,7 +23,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class ApiModuleForInfo {
 
     public final String BASE_URL = "http://www.omdbapi.com";
-    public final String API_KEY = "8c806c458";
+    public static final String API_KEY = "c806c458";
 
 
     @Provides
@@ -32,7 +33,7 @@ public class ApiModuleForInfo {
         interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
 
         return new OkHttpClient.Builder().addInterceptor(interceptor)
-                .addInterceptor(new Interceptor() {
+                /*.addInterceptor(new Interceptor() {
             @Override
             public Response intercept(Chain chain) throws IOException {
                 Request request = chain.request();
@@ -43,7 +44,10 @@ public class ApiModuleForInfo {
                 request = request.newBuilder().url(url).build();
                 return chain.proceed(request);
             }
-        }).build();
+        })*/.connectTimeout(10, TimeUnit.SECONDS)
+                .writeTimeout(10, TimeUnit.SECONDS)
+                .readTimeout(30, TimeUnit.SECONDS)
+                .build();
     }
 
     @Provides

@@ -1,6 +1,7 @@
 package br.com.theoldpinkeye.finalappforudemymvpcourse.http;
 
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 import dagger.Module;
 import dagger.Provides;
@@ -43,7 +44,10 @@ public class ApiModuleForName {
                 request = request.newBuilder().url(url).build();
                 return chain.proceed(request);
             }
-        }).build();
+        }).connectTimeout(10, TimeUnit.SECONDS)
+                .writeTimeout(10, TimeUnit.SECONDS)
+                .readTimeout(30, TimeUnit.SECONDS)
+                .build();
     }
 
     @Provides

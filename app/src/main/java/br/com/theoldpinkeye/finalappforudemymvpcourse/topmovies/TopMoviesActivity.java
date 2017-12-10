@@ -12,12 +12,14 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 import java.util.List;
 
+
 import javax.inject.Inject;
 
 import br.com.theoldpinkeye.finalappforudemymvpcourse.R;
 import br.com.theoldpinkeye.finalappforudemymvpcourse.root.App;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+
 
 public class TopMoviesActivity extends AppCompatActivity implements TopMoviesActivityMVP.View {
 
@@ -88,3 +90,4 @@ public class TopMoviesActivity extends AppCompatActivity implements TopMoviesAct
         Snackbar.make(rootView, msg, Snackbar.LENGTH_LONG).show();
     }
 }
+
