@@ -38,7 +38,7 @@ dependencies {
     compile 'com.google.code.gson:gson:2.8.2'
 
     //HTTP Logging
-    compile 'com.squareup.okhttp3:logging-interceptor:3.9.1'
+    compile 'com.squareup.okhttp3:logging-interceptor:4.8.1'
 
     //Injection
     compile 'com.google.dagger:dagger-android:2.13'
